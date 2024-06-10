@@ -1,13 +1,13 @@
-// src/screens/Home.js
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Dashboard from "./Dashboard";
+import Distributor from "../distributor/Distribution";
 
 const Home = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Dashboard</Text>
       <Dashboard />
+      <Distributor />
     </View>
   );
 };

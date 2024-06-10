@@ -8,6 +8,7 @@ import { Provider as PaperProvider } from "react-native-paper";
 import Login from "./src/screens/Login";
 import Home from "./src/screens/admin/Home";
 import Sidebar from "./src/components/Sidebar";
+import L from "./src/screens/L";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -24,7 +25,10 @@ export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{ headerShown: false }}
+        >
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Home" component={DrawerNavigator} />
         </Stack.Navigator>

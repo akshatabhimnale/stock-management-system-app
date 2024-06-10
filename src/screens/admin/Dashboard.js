@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -14,30 +14,101 @@ const Dashboard = () => {
   const [inventory, setInventory] = useState([]);
   const [newItem, setNewItem] = useState("");
 
+  // Fetch inventory data when the component mounts
+  useEffect(() => {
+    fetchInventoryData();
+  }, []);
+
+  const fetchInventoryData = () => {
+    fetch(
+      "https://stock-management-system-server.onrender.com/admin/api/inventories"
+    )
+      .then((response) => response.json())
+      .then((data) => setInventory(data))
+      .catch((error) => console.error("Error fetching inventory:", error));
+  };
+
   const addItem = () => {
     if (newItem.trim() === "") {
       Alert.alert("Error", "Please enter an item name");
       return;
     }
-    setInventory([...inventory, { id: inventory.length + 1, name: newItem }]);
-    setNewItem("");
+    addItemAPI();
   };
 
-  const deleteItem = (id) => {
-    setInventory(inventory.filter((item) => item.id !== id));
+  const addItemAPI = () => {
+    fetch(
+      "https://stock-management-system-server.onrender.com/admin/api/add-inventory",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ firstname: newItem }), // Ensure this matches your backend's expected field
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Inventory Added") {
+          setInventory((prevInventory) => [
+            ...prevInventory,
+            { _id: data.id, firstname: newItem }, // Assuming the server returns the ID of the newly added inventory
+          ]);
+          setNewItem("");
+        } else {
+          Alert.alert("Error", "Failed to add item to the database");
+        }
+      })
+      .catch((error) => {
+        console.error("Error adding item:", error);
+        Alert.alert("Error", "Failed to add item to the database");
+      });
+  };
+
+  const deleteItem = (_id) => {
+    deleteItemAPI(_id);
+  };
+
+  const deleteItemAPI = (_id) => {
+    console.log("Deleting item with id:", _id);
+    fetch(
+      `https://stock-management-system-server.onrender.com/admin/api/delete-inventory/${_id}`,
+      {
+        method: "POST",
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          setInventory((prevInventory) =>
+            prevInventory.filter((item) => item._id !== _id)
+          );
+        } else {
+          console.error("Error deleting item:", response.status);
+          response.text().then((errorMessage) => {
+            console.error("Error message:", errorMessage);
+            Alert.alert("Error", "Failed to delete item from the database");
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting item:", error);
+        Alert.alert("Error", "Failed to delete item from the database");
+      });
   };
 
   const renderInventoryItem = ({ item }) => (
     <View style={styles.itemCard}>
-      <Text style={styles.itemText}>{item.name}</Text>
+      <Text style={styles.itemText}>{item.firstname}</Text>
       <TouchableOpacity
         style={styles.deleteButton}
-        onPress={() => deleteItem(item.id)}
+        onPress={() => deleteItem(item._id)}
       >
         <Icon name="delete" size={24} color="#fff" />
       </TouchableOpacity>
     </View>
   );
+
+  const keyExtractor = (item) => item._id.toString();
 
   return (
     <View style={styles.container}>
@@ -57,7 +128,7 @@ const Dashboard = () => {
       <FlatList
         data={inventory}
         renderItem={renderInventoryItem}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={keyExtractor}
         style={styles.inventoryList}
       />
     </View>

@@ -1,3 +1,4 @@
+// Sidebar.js
 import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
@@ -16,17 +17,20 @@ export default function Sidebar(props) {
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
     // Implement dark mode toggle logic
-    // Example: You can set a global state in your app to control the theme
-    // For example, using React Context or Redux, then update your theme based on this state
-    // Here, we'll just console log the state for demonstration
     console.log("Dark mode toggled:", isDarkMode);
   };
 
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.container}>
-        <DrawerItem label="Inventary" />
-        <DrawerItem label="Distibutions" />
+        <DrawerItem
+          label="Inventory"
+          onPress={() => navigation.navigate("Dashboard")}
+        />
+        <DrawerItem
+          label="Distributions"
+          onPress={() => navigation.navigate("Distributions")}
+        />
         <DrawerItem label="Logout" onPress={handleLogout} />
         <TouchableRipple onPress={toggleDarkMode}>
           <View style={styles.preference}>
