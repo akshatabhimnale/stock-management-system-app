@@ -63,13 +63,7 @@ const Login = ({ navigation }) => {
             style={styles.input}
             keyboardType="email-address"
             autoCapitalize="none"
-            left={
-              <Icon
-                name={secureTextEntry ? "eye-off" : "eye"}
-                size={24}
-                color="grey"
-              />
-            }
+            left={<TextInput.Icon icon="account" color="grey" />}
           />
           <View style={styles.passwordContainer}>
             <TextInput
@@ -81,41 +75,15 @@ const Login = ({ navigation }) => {
               style={styles.passwordInput}
               secureTextEntry={secureTextEntry}
               autoCapitalize="none"
-              left={
-                <TouchableOpacity
-                  onPress={() => setSecureTextEntry(!secureTextEntry)}
-                  style={styles.iconContainer}
-                >
-                  <Icon
-                    name={secureTextEntry ? "eye-off" : "eye"}
-                    size={24}
-                    color="grey"
-                  />
-                </TouchableOpacity>
-              }
+              left={<TextInput.Icon icon="lock" color="grey" />}
               right={
-                <TouchableOpacity
+                <TextInput.Icon
+                  icon={secureTextEntry ? "eye" : "eye-off"}
+                  color="grey"
                   onPress={() => setSecureTextEntry(!secureTextEntry)}
-                  style={styles.iconContainer}
-                >
-                  <Icon
-                    name={secureTextEntry ? "eye-off" : "eye"}
-                    size={24}
-                    color="grey"
-                  />
-                </TouchableOpacity>
+                />
               }
             />
-            <TouchableOpacity
-              onPress={() => setSecureTextEntry(!secureTextEntry)}
-              style={styles.iconContainer}
-            >
-              <Icon
-                name={secureTextEntry ? "eye-off" : "eye"}
-                size={24}
-                color="grey"
-              />
-            </TouchableOpacity>
           </View>
           <Button
             mode="contained"
