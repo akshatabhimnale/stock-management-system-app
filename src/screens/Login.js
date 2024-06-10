@@ -63,7 +63,13 @@ const Login = ({ navigation }) => {
             style={styles.input}
             keyboardType="email-address"
             autoCapitalize="none"
-            left={<TextInput.Icon name="user" color="#000" size={24} />}
+            left={
+              <Icon
+                name={secureTextEntry ? "eye-off" : "eye"}
+                size={24}
+                color="grey"
+              />
+            }
           />
           <View style={styles.passwordContainer}>
             <TextInput
@@ -75,7 +81,18 @@ const Login = ({ navigation }) => {
               style={styles.passwordInput}
               secureTextEntry={secureTextEntry}
               autoCapitalize="none"
-              left={<TextInput.Icon name="lock" color="#000" size={24} />}
+              left={
+                <TouchableOpacity
+                  onPress={() => setSecureTextEntry(!secureTextEntry)}
+                  style={styles.iconContainer}
+                >
+                  <Icon
+                    name={secureTextEntry ? "eye-off" : "eye"}
+                    size={24}
+                    color="grey"
+                  />
+                </TouchableOpacity>
+              }
               right={
                 <TouchableOpacity
                   onPress={() => setSecureTextEntry(!secureTextEntry)}
