@@ -44,17 +44,13 @@ const Dashboard = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ firstname: newItem }), // Ensure this matches your backend's expected field
+        body: JSON.stringify({ firstName: newItem }), // Ensure this matches your backend's expected field
       }
     )
       .then((response) => response.json())
       .then((data) => {
         if (data.message === "Inventory Added") {
-          setInventory((prevInventory) => [
-            ...prevInventory,
-            { _id: data.id, firstname: newItem }, // Assuming the server returns the ID of the newly added inventory
-          ]);
-          setNewItem("");
+          fetchInventoryData();
         } else {
           Alert.alert("Error", "Failed to add item to the database");
         }
@@ -98,7 +94,7 @@ const Dashboard = () => {
 
   const renderInventoryItem = ({ item }) => (
     <View style={styles.itemCard}>
-      <Text style={styles.itemText}>{item.firstname}</Text>
+      <Text style={styles.itemText}>{item.firstName}</Text>
       <TouchableOpacity
         style={styles.deleteButton}
         onPress={() => deleteItem(item._id)}
@@ -108,7 +104,7 @@ const Dashboard = () => {
     </View>
   );
 
-  const keyExtractor = (item) => item._id.toString();
+  // const keyExtractor = (item) => item._id.toString();
 
   return (
     <View style={styles.container}>
@@ -128,7 +124,7 @@ const Dashboard = () => {
       <FlatList
         data={inventory}
         renderItem={renderInventoryItem}
-        keyExtractor={keyExtractor}
+        // keyExtractor={keyExtractor}
         style={styles.inventoryList}
       />
     </View>

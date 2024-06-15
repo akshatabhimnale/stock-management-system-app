@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
-import { TextInput, Button, Card, Title } from "react-native-paper";
+import { TextInput, Button, Card } from "react-native-paper";
 import ToastManager, { Toast } from "toastify-react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import axios from "axios"; // Import axios library
@@ -39,6 +39,10 @@ const Login = ({ navigation }) => {
     }
   };
 
+  const handleForgotPassword = () => {
+    navigation.navigate("ForgotPassword");
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.welcometext}>Welcome!</Text>
@@ -52,6 +56,7 @@ const Login = ({ navigation }) => {
         <Text style={styles.signInText}>Sign in your account</Text>
       </View>
       <ToastManager position="top" />
+
       <Card style={styles.card}>
         <Card.Content>
           <TextInput
@@ -103,6 +108,12 @@ const Login = ({ navigation }) => {
           >
             Login
           </Button>
+          <TouchableOpacity
+            onPress={handleForgotPassword}
+            style={styles.forgotPasswordButton}
+          >
+            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+          </TouchableOpacity>
         </Card.Content>
       </Card>
     </View>
@@ -181,6 +192,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#1b3d9e",
     elevation: 10,
     height: "100px",
+  },
+  forgotPasswordButton: {
+    marginTop: 16,
+    alignItems: "center",
+    flexDirection: "row-reverse",
+  },
+  forgotPasswordText: {
+    color: "grey",
+    textDecorationLine: "none",
   },
 });
 

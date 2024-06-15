@@ -8,6 +8,8 @@ import { Provider as PaperProvider } from "react-native-paper";
 import Login from "./src/screens/Login";
 import Home from "./src/screens/admin/Home";
 import Sidebar from "./src/components/Sidebar";
+import ForgotPassword from "./src/screens/ForgotPassword";
+import ResetPassword from "./src/screens/ResetPassword";
 import L from "./src/screens/L";
 
 const Stack = createStackNavigator();
@@ -31,6 +33,8 @@ export default function App() {
         >
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Home" component={DrawerNavigator} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+          <Stack.Screen name="ResetPassword" component={ResetPassword} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
