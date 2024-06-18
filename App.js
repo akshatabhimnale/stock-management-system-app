@@ -1,6 +1,7 @@
 // App.js
 import "react-native-gesture-handler";
 import React from "react";
+import * as Linking from "expo-linking";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -24,9 +25,21 @@ function DrawerNavigator() {
 }
 
 export default function App() {
+  const prefix = Linking.createURL("/");
+
+  const linking = {
+    prefixes: [prefix],
+    config: {
+      screens: {
+        Home: "home",
+        ResetPassword: "reset-password/:token",
+      },
+    },
+  };
+
   return (
     <PaperProvider>
-      <NavigationContainer>
+      <NavigationContainer linking={linking}>
         <Stack.Navigator
           initialRouteName="Login"
           screenOptions={{ headerShown: false }}

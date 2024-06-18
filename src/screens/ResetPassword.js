@@ -1,16 +1,23 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
-import { TextInput, Button, Card } from "react-native-paper";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { TextInput, Button, Card, IconButton } from "react-native-paper";
 import ToastManager, { Toast } from "toastify-react-native";
 
-const ResetPassword = ({ route, navigation }) => {
-  const { token } = route.params;
+const ResetPassword = ({ navigation }) => {
   const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleResetPassword = async () => {
+    if (newPassword !== confirmPassword) {
+      Toast.error("Passwords do not match");
+      return;
+    }
+
     try {
       const response = await fetch(
-        `https://stock-management-system-server.onrender.com/admin/api/reset-password/${token}`,
+        "https://stock-management-system-server.onrender.com/admin/api/reset-password",
         {
           method: "PUT",
           headers: {
@@ -22,14 +29,14 @@ const ResetPassword = ({ route, navigation }) => {
 
       const data = await response.json();
       if (data.status === "success") {
-        Toast.success("Password has been updated!");
+        Toast.success("Password updated successfully!");
         navigation.navigate("Login");
       } else {
         Toast.error(data.message);
       }
     } catch (error) {
-      console.error("Error resetting password:", error);
-      Toast.error("Error resetting password");
+      console.error("Error updating password:", error);
+      Toast.error("Error updating password");
     }
   };
 
@@ -39,17 +46,38 @@ const ResetPassword = ({ route, navigation }) => {
       <ToastManager position="top" />
       <Card style={styles.card}>
         <Card.Content>
-          <TextInput
-            mode="outline"
-            underlineColor="transparent"
-            label="New Password"
-            value={newPassword}
-            onChangeText={setNewPassword}
-            style={styles.input}
-            secureTextEntry
-            autoCapitalize="none"
-            left={<TextInput.Icon icon="lock" color="grey" />}
-          />
+          <View style={styles.passwordContainer}>
+            <TextInput
+              mode="outlined"
+              label="New Password"
+              value={newPassword}
+              onChangeText={setNewPassword}
+              style={styles.input}
+              secureTextEntry={!showNewPassword}
+              right={
+                <TextInput.Icon
+                  name={showNewPassword ? "eye-off" : "eye"}
+                  onPress={() => setShowNewPassword(!showNewPassword)}
+                />
+              }
+            />
+          </View>
+          <View style={styles.passwordContainer}>
+            <TextInput
+              mode="outlined"
+              label="Confirm New Password"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              style={styles.input}
+              secureTextEntry={!showConfirmPassword}
+              right={
+                <TextInput.Icon
+                  name={showConfirmPassword ? "eye-off" : "eye"}
+                  onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                />
+              }
+            />
+          </View>
           <Button
             mode="contained"
             onPress={handleResetPassword}
@@ -78,18 +106,15 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#FFFFFF",
   },
+  passwordContainer: {
+    position: "relative",
+    marginBottom: 16,
+  },
   input: {
     marginBottom: 16,
-    elevation: 10,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 30,
   },
   button: {
     marginTop: 16,
-    backgroundColor: "#1b3d9e",
-    height: 60,
-    borderRadius: 30,
-    justifyContent: "center",
   },
 });
 
