@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { TextInput, Button, Card, IconButton } from "react-native-paper";
+import { View, StyleSheet, Text } from "react-native";
+import { TextInput, Button, Card } from "react-native-paper";
 import ToastManager, { Toast } from "toastify-react-native";
 
-const ResetPassword = ({ navigation }) => {
+const ResetPassword = ({ route, navigation }) => {
+  const { token } = route.params; // Get the token from route parameters
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   const handleResetPassword = async () => {
     if (newPassword !== confirmPassword) {
@@ -17,7 +17,7 @@ const ResetPassword = ({ navigation }) => {
 
     try {
       const response = await fetch(
-        "https://stock-management-system-server.onrender.com/admin/api/reset-password",
+        `https://stock-management-system-server.onrender.com/admin/api/reset-password/${token}`,
         {
           method: "PUT",
           headers: {
@@ -53,11 +53,12 @@ const ResetPassword = ({ navigation }) => {
               value={newPassword}
               onChangeText={setNewPassword}
               style={styles.input}
-              secureTextEntry={!showNewPassword}
+              secureTextEntry={!secureTextEntry}
               right={
                 <TextInput.Icon
-                  name={showNewPassword ? "eye-off" : "eye"}
-                  onPress={() => setShowNewPassword(!showNewPassword)}
+                  icon={secureTextEntry ? "eye" : "eye-off"}
+                  color="grey"
+                  onPress={() => setSecureTextEntry(!secureTextEntry)}
                 />
               }
             />
@@ -69,11 +70,12 @@ const ResetPassword = ({ navigation }) => {
               value={confirmPassword}
               onChangeText={setConfirmPassword}
               style={styles.input}
-              secureTextEntry={!showConfirmPassword}
+              secureTextEntry={!secureTextEntry}
               right={
                 <TextInput.Icon
-                  name={showConfirmPassword ? "eye-off" : "eye"}
-                  onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                  icon={secureTextEntry ? "eye" : "eye-off"}
+                  color="grey"
+                  onPress={() => setSecureTextEntry(!secureTextEntry)}
                 />
               }
             />
